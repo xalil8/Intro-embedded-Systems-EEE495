@@ -1,5 +1,4 @@
 #include <msp430g2553.h>
-//halil ibrahim özcan 2017514050
 
 volatile long tempRaw;
 volatile long celcius;
