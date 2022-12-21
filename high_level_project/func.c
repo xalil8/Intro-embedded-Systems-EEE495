@@ -8,227 +8,149 @@
 #include "func.h"
 
 
-//void different_drive()
 
+void run_motor(int step_number){
 
-
-
-
+    int i;
+    for(i = 0 ;i <=step_number;i++){  //for infinity loop
+        motor_clockwise();
+    }
+}
 
 void motor_clockwise(void){
 
-    P1OUT |= GREEN; //WHEN MOTOR TURN  CLOCKWISE GREEN LIGHT ON
-    P1OUT &= ~RED;
-
-    _delay_cycles(motor_speed);
-    P1OUT |= IN1;
-    P1OUT |= IN2;
-    P1OUT &=  ~IN3;
-    P1OUT &=  ~IN4;
-
-    _delay_cycles(motor_speed);
-
-    P1OUT |= IN2;
-    P1OUT |= IN3;
-    P1OUT &=  ~IN1;
-    P1OUT &=  ~IN4;
-
-    _delay_cycles(motor_speed);
-
-    P1OUT |= IN3;
-    P1OUT |= IN4;
-    P1OUT &=  ~IN1;
-    P1OUT &=  ~IN2;
-
-
-    _delay_cycles(motor_speed);
-
+    //IN1 IN2 IN3 IN4
+    //1    0   0    1
     P1OUT |= IN1;
     P1OUT |= IN4;
     P1OUT &=  ~IN2;
     P1OUT &=  ~IN3;
-
     _delay_cycles(motor_speed);
-
-    P1OUT &=  ~IN1;
-    P1OUT &=  ~IN4;
-    P1OUT &=  ~IN2;
-    P1OUT &=  ~IN3;
- }
-
-
-void counter_motor_clockwise(void){
-    P1OUT |= RED;       //WHEN MOTOR TURN COUNTER CLOCKWISE RED LIGHT ON
-    P1OUT &= ~GREEN;
-
-
-    _delay_cycles(motor_speed);
-    P1OUT |= IN1;
-    P1OUT |= IN4;
-    P1OUT &=  ~IN2;
-    P1OUT &=  ~IN3;
-
-    _delay_cycles(motor_speed);
-    P1OUT |= IN3;
-    P1OUT |= IN4;
-    P1OUT &=  ~IN1;
-    P1OUT &=  ~IN2;
-
-    _delay_cycles(motor_speed);
-    P1OUT |= IN2;
-    P1OUT |= IN3;
-    P1OUT &=  ~IN1;
-    P1OUT &=  ~IN4;
-
-    _delay_cycles(motor_speed);
-    P1OUT |= IN1;
-    P1OUT |= IN2;
-    P1OUT &=  ~IN3;
-    P1OUT &=  ~IN4;
- }
-
-void cw_8_step(void){
-
 
     //IN1 IN2 IN3 IN4
     //1    0   0    0
-    _delay_cycles(motor_speed);
     P1OUT |= IN1;
     P1OUT &=  ~IN2;
     P1OUT &=  ~IN3;
     P1OUT &=  ~IN4;
+    _delay_cycles(motor_speed);
 
     //IN1 IN2 IN3 IN4
     //1    1   0    0
-    _delay_cycles(motor_speed);
     P1OUT |= IN1;
     P1OUT |= IN2;
     P1OUT &=  ~IN3;
     P1OUT &=  ~IN4;
-
+    _delay_cycles(motor_speed);
 
     //IN1 IN2 IN3 IN4
     //0    1   0    0
-    _delay_cycles(motor_speed);
     P1OUT |= IN2;
     P1OUT &=  ~IN1;
     P1OUT &=  ~IN3;
     P1OUT &=  ~IN4;
+    _delay_cycles(motor_speed);
 
     //IN1 IN2 IN3 IN4
     //0    1   1    0
-    _delay_cycles(motor_speed);
     P1OUT |= IN2;
     P1OUT |= IN3;
     P1OUT &=  ~IN1;
     P1OUT &=  ~IN4;
+    _delay_cycles(motor_speed);
 
     //IN1 IN2 IN3 IN4
     //0    0   1    0
-    _delay_cycles(motor_speed);
     P1OUT |= IN3;
     P1OUT &=  ~IN1;
     P1OUT &=  ~IN2;
     P1OUT &=  ~IN4;
+    _delay_cycles(motor_speed);
 
     //IN1 IN2 IN3 IN4
     //0    0   1    1
-    _delay_cycles(motor_speed);
     P1OUT |= IN3;
     P1OUT |= IN4;
     P1OUT &=  ~IN1;
     P1OUT &=  ~IN2;
+    _delay_cycles(motor_speed);
+
 
     //IN1 IN2 IN3 IN4
     //0    0   0    1
-    _delay_cycles(motor_speed);
     P1OUT |= IN4;
     P1OUT &=  ~IN1;
     P1OUT &=  ~IN2;
     P1OUT &=  ~IN3;
-
-    //IN1 IN2 IN3 IN4
-    //1    0   0    1
     _delay_cycles(motor_speed);
-    P1OUT |= IN1;
-    P1OUT |= IN4;
-    P1OUT &=  ~IN2;
-    P1OUT &=  ~IN3;
 
 }
 
+void motor_counter_clockwise(void){
 
-void MOTOR2_cw_8_step(void){
+    //IN1 IN2 IN3 IN4
+    //0    0   0    1
+    P1OUT &=  ~IN1;
+    P1OUT &=  ~IN2;
+    P1OUT &=  ~IN3;
+    P1OUT |= IN4;
+    _delay_cycles(motor_speed);
 
+    //IN1 IN2 IN3 IN4
+    //0    0   1    1
+    P1OUT &=  ~IN1;
+    P1OUT &=  ~IN2;
+    P1OUT |= IN3;
+    P1OUT |= IN4;
+    _delay_cycles(motor_speed);
+
+    //IN1 IN2 IN3 IN4
+    //0    0   1    0
+    P1OUT &=  ~IN1;
+    P1OUT &=  ~IN2;
+    P1OUT |= IN3;
+    P1OUT &=  ~IN4;
+    _delay_cycles(motor_speed);
+
+    //IN1 IN2 IN3 IN4
+    //0    1   1    0
+    P1OUT &=  ~IN1;
+    P1OUT |= IN2;
+    P1OUT |= IN3;
+    P1OUT &=  ~IN4;
+    _delay_cycles(motor_speed);
+
+    //IN1 IN2 IN3 IN4
+    //0    1   0    0
+    P1OUT &=  ~IN1;
+    P1OUT |= IN2;
+    P1OUT &=  ~IN3;
+    P1OUT &=  ~IN4;
+    _delay_cycles(motor_speed);
+
+    //IN1 IN2 IN3 IN4
+    //1    1   0    0
+    P1OUT |= IN1;
+    P1OUT |= IN2;
+    P1OUT &=  ~IN3;
+    P1OUT &=  ~IN4;
+    _delay_cycles(motor_speed);
 
     //IN1 IN2 IN3 IN4
     //1    0   0    0
+    P1OUT |= IN1;
+    P1OUT &=  ~IN2;
+    P1OUT &=  ~IN3;
+    P1OUT &=  ~IN4;
     _delay_cycles(motor_speed);
-    P2OUT |= MOTOR2_IN1;
-    P2OUT &=  ~MOTOR2_IN2;
-    P2OUT &=  ~MOTOR2_IN3;
-    P2OUT &=  ~MOTOR2_IN4;
-
-    //IN1 IN2 IN3 IN4
-    //1    1   0    0
-    _delay_cycles(motor_speed);
-    P2OUT |= MOTOR2_IN1;
-    P2OUT |= MOTOR2_IN2;
-    P2OUT &=  ~MOTOR2_IN3;
-    P2OUT &=  ~MOTOR2_IN4;
-
-
-    //IN1 IN2 IN3 IN4
-    //0    1   0    0
-    _delay_cycles(motor_speed);
-    P2OUT |= MOTOR2_IN2;
-    P2OUT &=  ~MOTOR2_IN1;
-    P2OUT &=  ~MOTOR2_IN3;
-    P2OUT &=  ~MOTOR2_IN4;
-
-    //IN1 IN2 IN3 IN4
-    //0    1   1    0
-    _delay_cycles(motor_speed);
-    P2OUT |= MOTOR2_IN2;
-    P2OUT |= MOTOR2_IN3;
-    P2OUT &=  ~MOTOR2_IN1;
-    P2OUT &=  ~MOTOR2_IN4;
-
-    //IN1 IN2 IN3 IN4
-    //0    0   1    0
-    _delay_cycles(motor_speed);
-    P2OUT |= MOTOR2_IN3;
-    P2OUT &=  ~MOTOR2_IN1;
-    P2OUT &=  ~MOTOR2_IN2;
-    P2OUT &=  ~MOTOR2_IN4;
-
-    //IN1 IN2 IN3 IN4
-    //0    0   1    1
-    _delay_cycles(motor_speed);
-    P2OUT |= MOTOR2_IN3;
-    P2OUT |= MOTOR2_IN4;
-    P2OUT &=  ~MOTOR2_IN1;
-    P2OUT &=  ~MOTOR2_IN2;
-
-    //IN1 IN2 IN3 IN4
-    //0    0   0    1
-    _delay_cycles(motor_speed);
-    P2OUT |= MOTOR2_IN4;
-    P2OUT &=  ~MOTOR2_IN1;
-    P2OUT &=  ~MOTOR2_IN2;
-    P2OUT &=  ~MOTOR2_IN3;
 
     //IN1 IN2 IN3 IN4
     //1    0   0    1
+    P1OUT |= IN1;
+    P1OUT &=  ~IN2;
+    P1OUT &=  ~IN3;
+    P1OUT |= IN4;
     _delay_cycles(motor_speed);
-    P2OUT |= MOTOR2_IN1;
-    P2OUT |= MOTOR2_IN4;
-    P2OUT &=  ~MOTOR2_IN2;
-    P2OUT &=  ~MOTOR2_IN3;
 }
-
-
-
-
 
 
