@@ -52,8 +52,8 @@ __interrupt void USCI0RX_ISR(void)
 
 
     if (rxString[0] == 'R' && rxString[1] == 'G') {
-        P1OUT |= BIT0
-        P1OUT |= BIT0
+        P1OUT |= BIT0;
+        P1OUT |= BIT0;
         }
     else{
         UARTSendArray("Unknown Command: ", 17);
