@@ -60,6 +60,7 @@ __interrupt void USCI0RX_ISR(void){
         P1OUT &= ~BIT6;
         P1OUT &= ~BIT0;
         }
+    IFG2 &= ~UCA0RXIFG;  // interrupt flag clear 
 
 }
 
