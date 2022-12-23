@@ -2,10 +2,10 @@
 #include "msp430g2553.h"
 void UARTGetArray(void);
 
-void UARTSendArray(unsigned char *TxArray, unsigned char ArrayLength);
+void UARTSendArray(char *TxArray, unsigned char ArrayLength);
 
 char str[2];  // buffer to store received string
-int i=0;
+unsigned int i=0;
 
 void main(void)
 {
@@ -33,17 +33,16 @@ void main(void)
 }
 
 
-void UARTSendArray(unsigned char *TxArray, unsigned char ArrayLength){
-    while(ArrayLength--){ // Loop until StringLength == 0 and post decrement
-        while(!(IFG2 & UCA0TXIFG)); // Wait for TX buffer to be ready for new data
-        UCA0TXBUF = *TxArray; //Write the character at the location specified by the pointer
-        TxArray++; //Increment the TxString pointer to point to the next character
+void UARTSendArray(char *TxArray, unsigned char ArrayLength){
+    while(ArrayLength--){                       // Loop until StringLength == 0 and post decrement
+        while(!(IFG2 & UCA0TXIFG));             // Wait for TX buffer to be ready for new data
+        UCA0TXBUF = *TxArray;                   //Write the character at the location specified by the pointer
+        TxArray++;                          //Increment the TxString pointer to point to the next character
     }
 }
 
 
 void UARTGetArray(void){
-    char input = UCA0RXBUF;
 
     while(1){
         while(!(IFG2 & UCA0RXIFG));
@@ -58,18 +57,16 @@ void UARTGetArray(void){
     UARTSendArray(str, sizeof(str));
     UARTSendArray("\n\r", 2);
 
-//    if (str[0] == '3' && str[1] == 'g') {
-//        P1OUT |= BIT0;
-//        P1OUT &= ~BIT6;
-//
-//        UARTSendArray("ANAN", 4);
-//        UARTSendArray("\n\r", 2);
-//        UARTSendArray(&str, 2);
-//        UARTSendArray("\n\r", 2);
-//        }
-//    else{
-//        P1OUT |= BIT6;
-//        P1OUT &= ~BIT0;
-//
-//        }
+    if (str[0] == 'G' && str[1] == 'G') {
+        P1OUT |= BIT0;
+        P1OUT |= BIT6;
+        UARTSendArray("WORKED", 6);
+        UARTSendArray("\n\r", 2);
+        }
+    else{
+
+        P1OUT &= ~BIT6;
+        P1OUT &= ~BIT0;
+
+        }
 }
