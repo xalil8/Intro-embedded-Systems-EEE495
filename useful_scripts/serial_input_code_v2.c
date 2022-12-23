@@ -1,6 +1,5 @@
 //Halil ibrahim Özcan 2017514050
 #include "msp430g2553.h"
-void UARTGetArray(void);
 
 void UARTSendArray(char *TxArray, unsigned char ArrayLength);
 
@@ -25,25 +24,18 @@ void main(void)
     UCA0BR0 = 104; // Set baud rate to 9600 with 1MHz clock (Data Sheet 15.3.13)
     UCA0MCTL = UCBRS0; // Modulation UCBRSx = 1
 
+    UARTSendArray("interrupt will be start ", 24);
+    UARTSendArray("\n\r", 2);
+    IE2 |= UCA0RXIE; // Enable USCI_A0 RX interrupt
+    __bis_SR_register(LPM0_bits + GIE); // Enter LPM0, interrupts enabled
 
-    while(1){
-        UARTGetArray();
-
-    }
+    UARTSendArray("interrupt Done", 14);
+    UARTSendArray("\n\r", 2);
 }
 
 
-void UARTSendArray(char *TxArray, unsigned char ArrayLength){
-    while(ArrayLength--){                       // Loop until StringLength == 0 and post decrement
-        while(!(IFG2 & UCA0TXIFG));             // Wait for TX buffer to be ready for new data
-        UCA0TXBUF = *TxArray;                   //Write the character at the location specified by the pointer
-        TxArray++;                          //Increment the TxString pointer to point to the next character
-    }
-}
-
-
-void UARTGetArray(void){
-
+#pragma vector=USCIAB0RX_VECTOR
+__interrupt void USCI0RX_ISR(void){
     while(1){
         while(!(IFG2 & UCA0RXIFG));
         str[i] = UCA0RXBUF;
@@ -63,10 +55,24 @@ void UARTGetArray(void){
         UARTSendArray("WORKED", 6);
         UARTSendArray("\n\r", 2);
         }
-    else{
 
+    else{
         P1OUT &= ~BIT6;
         P1OUT &= ~BIT0;
-
         }
+
 }
+
+
+
+
+void UARTSendArray(char *TxArray, unsigned char ArrayLength){
+    while(ArrayLength--){                       // Loop until StringLength == 0 and post decrement
+        while(!(IFG2 & UCA0TXIFG));             // Wait for TX buffer to be ready for new data
+        UCA0TXBUF = *TxArray;                   //Write the character at the location specified by the pointer
+        TxArray++;                          //Increment the TxString pointer to point to the next character
+    }
+}
+
+
+
