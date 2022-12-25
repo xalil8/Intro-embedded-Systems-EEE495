@@ -50,11 +50,12 @@ __interrupt void Port_1(void)
                 UARTSendArray("x_current += 1", 14);
                 UARTSendArray("\n\r", 2);
 
-                motor1_clockwise();
                 P1OUT &=  ~MOTOR1_IN1;
                 P1OUT &=  ~MOTOR1_IN2;
                 P1OUT &=  ~MOTOR1_IN3;
                 P1OUT &=  ~MOTOR1_IN4;
+                motor1_clockwise();
+
 
 
             }
@@ -63,11 +64,12 @@ __interrupt void Port_1(void)
                 UARTSendArray("x_current -= 1", 14);
                 UARTSendArray("\n\r", 2);
 
-                motor1_counter_clockwise();
                 P1OUT &=  ~MOTOR1_IN1;
                 P1OUT &=  ~MOTOR1_IN2;
                 P1OUT &=  ~MOTOR1_IN3;
                 P1OUT &=  ~MOTOR1_IN4;
+                motor1_counter_clockwise();
+
             }
         }
         P1IFG &= ~BIT0;  // Clear interrupt flag
@@ -90,11 +92,9 @@ __interrupt void Port_2(void)
                 UARTSendArray("y_current += 1", 14);
                 UARTSendArray("\n\r", 2);
 
+
                 motor2_clockwise();
-                P2OUT &=  ~MOTOR2_IN1;
-                P2OUT &=  ~MOTOR2_IN2;
-                P2OUT &=  ~MOTOR2_IN3;
-                P2OUT &=  ~MOTOR2_IN4;
+
 
             }
             else {
@@ -102,11 +102,9 @@ __interrupt void Port_2(void)
                 UARTSendArray("y_current -= 1", 14);
                 UARTSendArray("\n\r", 2);
 
+
                 motor2_counter_clockwise();
-                P2OUT &=  ~MOTOR2_IN1;
-                P2OUT &=  ~MOTOR2_IN2;
-                P2OUT &=  ~MOTOR2_IN3;
-                P2OUT &=  ~MOTOR2_IN4;
+
             }
         }
         P2IFG &= ~BIT0;  // Clear interrupt flag
@@ -147,14 +145,14 @@ void main(void)
     P1DIR &= ~BIT0;  // Set P1.1 as an input
     P1REN |= BIT0;   // Enable pull-up resistor on P1.1
     P1OUT |= BIT0;   // Set pull-up resistor to pull-up
-    P1IE |= BIT0;    // Enable interrupt on P1.1
+    P1IE  |= BIT0;    // Enable interrupt on P1.1
     P1IES |= BIT0;   // Set interrupt to trigger on rising edge (logic 1)
     P1IFG &= ~BIT0;  // Clear interrupt flag
     //interrupt P2.0
     P2DIR &= ~BIT0;  // Set P2.0 as an input
     P2REN |= BIT0;   // Enable pull-up resistor on P2.0
     P2OUT |= BIT0;   // Set pull-up resistor to pull-up
-    P2IE |= BIT0;    // Enable interrupt on P2.0
+    P2IE  |= BIT0;    // Enable interrupt on P2.0
     P2IES |= BIT0;   // Set interrupt to trigger on rising edge (logic 1)
     P2IFG &= ~BIT0;  // Clear interrupt flag
     //###############################
@@ -163,7 +161,7 @@ void main(void)
 
     while(1)
     {
-        __delay_cycles(20000);
+        __delay_cycles(2000);
         UARTSendArray("enter coordinates", 17);
         UARTSendArray("\n\r", 2);
         while(1){
@@ -277,6 +275,11 @@ void motor1_clockwise(void){
         P1OUT &=  ~MOTOR1_IN3;
         _delay_cycles(motor_speed);
 
+        P1OUT &=  ~MOTOR1_IN1;
+        P1OUT &=  ~MOTOR1_IN2;
+        P1OUT &=  ~MOTOR1_IN3;
+        P1OUT &=  ~MOTOR1_IN4;
+        _delay_cycles(motor_speed);
     }
 }
 
@@ -348,6 +351,11 @@ void motor1_counter_clockwise(void){
         P1OUT |= MOTOR1_IN4;
         _delay_cycles(motor_speed);
 
+        P1OUT &=  ~MOTOR1_IN1;
+        P1OUT &=  ~MOTOR1_IN2;
+        P1OUT &=  ~MOTOR1_IN3;
+        P1OUT &=  ~MOTOR1_IN4;
+        _delay_cycles(motor_speed);
     }
 }
 
@@ -416,6 +424,14 @@ void motor2_clockwise(void){
         //1    0   0    1
         P2OUT |= MOTOR2_IN1;
         P2OUT |= MOTOR2_IN4;
+        P2OUT &=  ~MOTOR2_IN2;
+        P2OUT &=  ~MOTOR2_IN3;
+        _delay_cycles(motor_speed);
+
+        //MOTOR2_IN1 MOTOR2_IN2 MOTOR2_IN3 MOTOR2_IN4
+        //1    0   0    1
+        P2OUT &=  ~MOTOR2_IN1;
+        P2OUT &=  ~MOTOR2_IN4;
         P2OUT &=  ~MOTOR2_IN2;
         P2OUT &=  ~MOTOR2_IN3;
         _delay_cycles(motor_speed);
@@ -490,5 +506,10 @@ void motor2_counter_clockwise(void){
         P2OUT |= MOTOR2_IN4;
         _delay_cycles(motor_speed);
 
+        P2OUT &=  ~MOTOR2_IN1;
+        P2OUT &=  ~MOTOR2_IN4;
+        P2OUT &=  ~MOTOR2_IN2;
+        P2OUT &=  ~MOTOR2_IN3;
+        _delay_cycles(motor_speed);
     }
 }
