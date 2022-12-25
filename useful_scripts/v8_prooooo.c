@@ -1,3 +1,4 @@
+/*halil ibrahim Ozcan */
 
 #include "msp430g2553.h"
 
@@ -19,8 +20,8 @@ void UARTSendArray(char *TxArray, unsigned char ArrayLength);
 char str[2];  // buffer to store received string
 unsigned int i=0;
 
-int x_current = 3;
-int y_current = 3;
+int x_current = 0;
+int y_current = 0;
 int x_new, y_new;
 
 
@@ -62,67 +63,45 @@ __interrupt void Port_1(void)
     }
 }
 
+#pragma vector=PORT2_VECTOR
+__interrupt void Port_2(void)
+{
+    if (P2IFG & BIT0)  // Check if interrupt was triggered by P1.1
+    {
 
-// #pragma vector=TIMER0_A0_VECTOR
-// __interrupt void Timer_A (void)
-// {
-
-//    // __bic_SR_register(LPM0_bits);
-//     UARTSendArray("ISR1 WORKED ", 12);
-//     UARTSendArray("\n\r", 2);
-
-
-
-//     while (x_current != x_new) {
-//         if (x_current < x_new){
-//             x_current++;
-//             UARTSendArray("x_current += 1", 14);
-//             UARTSendArray("\n\r", 2);
-//         }
-//         else {
-//             x_current--;
-//             UARTSendArray("x_current -= 1", 14);
-//             UARTSendArray("\n\r", 2);
-//         }
-//     }
-
-//         //    motor_counter_clockwise();
-//         //    P1OUT &=  ~IN1;
-//         //    P1OUT &=  ~IN2;
-//         //    P1OUT &=  ~IN3;
-//         //    P1OUT &=  ~IN4;
-// }
+        UARTSendArray("ISR2 WORKED ", 12);
+        UARTSendArray("\n\r", 2);
 
 
-// #pragma vector=TIMER0_A1_VECTOR
-// __interrupt void Timer_A1 (void)
+        while (y_current != y_new) {
+            if (y_current < y_new){
+                y_current++;
+                UARTSendArray("y_current += 1", 14);
+                UARTSendArray("\n\r", 2);
 
-// {
-//     //__bic_SR_register(LPM0_bits);
-//     UARTSendArray("ISR2 WORKED ", 12);
-//     UARTSendArray("\n\r", 2);
+//                motor_clockwise();
+//                P1OUT &=  ~IN1;
+//                P1OUT &=  ~IN2;
+//                P1OUT &=  ~IN3;
+//                P1OUT &=  ~IN4;
 
+            }
+            else {
+                y_current--;
+                UARTSendArray("y_current -= 1", 14);
+                UARTSendArray("\n\r", 2);
 
-//       while (y_current != y_new) {
-//         if (y_current < y_new){
-//             y_current++;
-//             UARTSendArray("y_current += 1", 14);
-//             UARTSendArray("\n\r", 2);
-//         }
-//         else {
-//             y_current--;
-//             UARTSendArray("y_current -= 1", 14);
-//             UARTSendArray("\n\r", 2);
-//         }
-//     }
+//                motor_counter_clockwise();
+//                P1OUT &=  ~IN1;
+//                P1OUT &=  ~IN2;
+//                P1OUT &=  ~IN3;
+//                P1OUT &=  ~IN4;
+            }
+        }
+        P2IFG &= ~BIT0;  // Clear interrupt flag
+    }
+}
 
-
-//         //    motor_clockwise();
-//         //    P1OUT &=  ~IN1;
-//         //    P1OUT &=  ~IN2;
-//         //    P1OUT &=  ~IN3;
-//         //    P1OUT &=  ~IN4;
-// }
 
 
 void main(void)
@@ -151,12 +130,23 @@ void main(void)
     // TA0CCR1 = 4000;
     // TA0CCTL1 = CCIE;
 
+    //###############################
+    //interrupt P1.0
     P1DIR &= ~BIT0;  // Set P1.1 as an input
     P1REN |= BIT0;   // Enable pull-up resistor on P1.1
     P1OUT |= BIT0;   // Set pull-up resistor to pull-up
     P1IE |= BIT0;    // Enable interrupt on P1.1
     P1IES |= BIT0;   // Set interrupt to trigger on rising edge (logic 1)
     P1IFG &= ~BIT0;  // Clear interrupt flag
+    //interrupt P2.0
+    P2DIR &= ~BIT0;  // Set P2.0 as an input
+    P2REN |= BIT0;   // Enable pull-up resistor on P2.0
+    P2OUT |= BIT0;   // Set pull-up resistor to pull-up
+    P2IE |= BIT0;    // Enable interrupt on P2.0
+    P2IES |= BIT0;   // Set interrupt to trigger on rising edge (logic 1)
+    P2IFG &= ~BIT0;  // Clear interrupt flag
+    //###############################
+
     __bis_SR_register(GIE);  // Enable global interrupts
 
     while(1)
@@ -173,14 +163,21 @@ void main(void)
             break;
             }
         }
+        UARTSendArray(str, 2);
+        UARTSendArray("\n\r", 2);
         x_new = str[0] - '0'; //conver string '1' to int 1
         y_new = str[1] - '0';
 
-        if (x_new != x_current)
+        if (x_new != x_current) //if new x coordinate different than current , interrupt occur
         {
             P1IFG |= BIT0;
         }
 
+
+        if (y_new != y_current)//if new y coordinate different than current , interrupt occur
+        {
+            P2IFG |= BIT0;
+        }
         __no_operation();  // Wait for interrupt
     }
 }
