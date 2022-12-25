@@ -7,6 +7,7 @@
 #include <msp430.h>
 
 #ifndef FUNC_H_
+
 #define FUNC_H_
 
 
@@ -27,6 +28,9 @@
 #define MOTOR2_IN3 BIT3
 #define MOTOR2_IN4 BIT4
 
+#pragma vector=PORT1_VECTOR
+#pragma vector=PORT2_VECTOR
+
 void motor1_counter_clockwise(void);
 void motor1_clockwise(void);
 
@@ -35,7 +39,7 @@ void motor2_clockwise(void);
 
 void UARTSendArray(char *TxArray, unsigned char ArrayLength);
 
-char str[2];  // buffer to store received string
+char str[4];  // buffer to store received string
 unsigned int i=0;
 int x_current = 0;
 int y_current = 0;

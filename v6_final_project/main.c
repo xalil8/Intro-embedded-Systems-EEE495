@@ -7,63 +7,6 @@
 #include "msp430g2553.h"
 #include "func.h"
 
-#pragma vector=PORT1_VECTOR
-__interrupt void Port_1(void)
-{
-    if (P1IFG & BIT0)  // Check if interrupt was triggered by P1.1
-    {
-        UARTSendArray("ISR1 WORKED ", 12);
-        UARTSendArray("\n\r", 2);
-
-        while (x_current != x_new) {
-            if (x_current < x_new){
-                x_current++;
-                UARTSendArray("x_current += 1", 14);
-                UARTSendArray("\n\r", 2);
-
-                motor1_clockwise();
-            }
-            else {
-                x_current--;
-                UARTSendArray("x_current -= 1", 14);
-                UARTSendArray("\n\r", 2);
-                motor1_counter_clockwise();
-            }
-        }
-        P1IFG &= ~BIT0;  // Clear interrupt flag
-    }
-}
-
-
-#pragma vector=PORT2_VECTOR
-__interrupt void Port_2(void)
-{
-    if (P2IFG & BIT0)  // Check if interrupt was triggered by P1.1
-    {
-        UARTSendArray("ISR2 WORKED ", 12);
-        UARTSendArray("\n\r", 2);
-
-        while (y_current != y_new) {
-            if (y_current < y_new){
-                y_current++;
-                UARTSendArray("y_current += 1", 14);
-                UARTSendArray("\n\r", 2);
-                motor2_clockwise();
-
-
-            }
-            else {
-                y_current--;
-                UARTSendArray("y_current -= 1", 14);
-                UARTSendArray("\n\r", 2);
-                motor2_counter_clockwise();
-            }
-        }
-        P2IFG &= ~BIT0;  // Clear interrupt flag
-    }
-}
-
-
 
 void main(void)
 {
@@ -125,10 +68,31 @@ void main(void)
             break;
             }
         }
-        UARTSendArray(str, 2);
+
+        UARTSendArray(str, 2); //print coordinates taken 
         UARTSendArray("\n\r", 2);
-        x_new = str[0] - '0'; //conver string '1' to int 1
-        y_new = str[1] - '0';
+
+        //these code for parsing string that taken from serial terminal
+        if(str[0]=="-"){
+            x_new = str[1] * -1
+            if (x_new < -5) x_new = -5;
+        }
+        else{
+            x_new = str[1] 
+            if (x_new > 5) x_new = 5;          
+        }
+
+        if(str[2]=="-"){
+            y_new = str[3] * -1
+            if (y_new < -5) y_new = -5;
+        }
+        else{
+            x_new = str[3] 
+            if (y_new > 5) t_new = 5;          
+        }
+
+        x_new = x_new - '0'; //conver string '1' to int 1
+        y_new = y_new - '0';
 
         if (x_new != x_current) //if new x coordinate different than current , interrupt occur
         {
