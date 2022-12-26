@@ -1,5 +1,9 @@
-/*halil ibrahim Ozcan */
-
+/*
+ *  Created on: Dec 26, 2022
+ *      Author: Halil Ibrahim Özcan
+ *      School No: 2017514050
+ *      E-mail : halil.ozcan1999@gmail.com
+ */
 #include "msp430g2553.h"
 #include "func.h"
 

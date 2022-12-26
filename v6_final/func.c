@@ -1,9 +1,11 @@
 /*
  * func.c
- *
  *  Created on: Dec 26, 2022
- *      Author: halil
+ *      Author: Halil Ibrahim Özcan
+ *      School No: 2017514050
+ *      E-mail : halil.ozcan1999@gmail.com
  */
+
 #include "func.h"
 
 #pragma vector=PORT1_VECTOR
