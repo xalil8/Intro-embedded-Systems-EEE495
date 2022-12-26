@@ -1,7 +1,6 @@
 /*halil ibrahim Ozcan */
 
 #include "msp430g2553.h"
-#include <math.h>
 
 #define step_number 512
 #define motor_speed 1300
