@@ -50,7 +50,6 @@ __interrupt void Port_2(void)
                 write_serial("\n\r", 2);
                 motor2_clockwise();
 
-
             }
             else {
                 y_current--;
@@ -77,7 +76,10 @@ void write_serial(char *string, unsigned char string_lenght){
 void motor1_clockwise(void){
 
     int c;
+    P2OUT |= BUZZER;
     for(c = 0 ;c <=step_number;c++){
+
+        if(c == buzzer_duration) P2OUT &= ~BUZZER; //BUZZER OFF AFTER A FEW SEC
         //MOTOR1_IN1 MOTOR1_IN2 MOTOR1_IN3 MOTOR1_IN4
         //1    0   0    0
         P1OUT |= MOTOR1_IN1;
@@ -142,7 +144,6 @@ void motor1_clockwise(void){
         P1OUT &=  ~MOTOR1_IN2;
         P1OUT &=  ~MOTOR1_IN3;
         _delay_cycles(motor_speed);
-
     }
 
     //turn off all input
@@ -157,7 +158,9 @@ void motor1_clockwise(void){
 void motor1_counter_clockwise(void){
 
     int c;
+    P2OUT |= BUZZER; //BUZZER ON
     for(c = 0 ;c <=step_number;c++){
+        if(c == buzzer_duration) P2OUT &= ~BUZZER; //BUZZER OFF AFTER A FEW SEC
         //MOTOR1_IN1 MOTOR1_IN2 MOTOR1_IN3 MOTOR1_IN4
         //0    0   0    1
         P1OUT &=  ~MOTOR1_IN1;
@@ -221,7 +224,6 @@ void motor1_counter_clockwise(void){
         P1OUT &=  ~MOTOR1_IN3;
         P1OUT |= MOTOR1_IN4;
         _delay_cycles(motor_speed);
-
     }
     //turn off all input
     //0    0    0    0
@@ -235,8 +237,10 @@ void motor1_counter_clockwise(void){
 void motor2_clockwise(void){
 
     int c;
+    P2OUT |= BUZZER; //BUZZER ON
     for(c = 0 ;c <=step_number;c++){
 
+        if(c == buzzer_duration) P2OUT &= ~BUZZER; //BUZZER OFF AFTER A FEW SEC
         //MOTOR2_IN1 MOTOR2_IN2 MOTOR2_IN3 MOTOR2_IN4
         //1    0   0    0
         P2OUT |=  MOTOR2_IN1;
@@ -300,7 +304,6 @@ void motor2_clockwise(void){
         P2OUT &=  ~MOTOR2_IN3;
         P2OUT |= MOTOR2_IN4;
         _delay_cycles(motor_speed);
-
     }
     //turn off all input
     //0    0    0    0
@@ -311,8 +314,11 @@ void motor2_clockwise(void){
 }
 
 void motor2_counter_clockwise(void){
+
     int c;
+    P2OUT |= BUZZER; //BUZZER ON
     for(c = 0 ;c <=step_number;c++){
+        if(c == buzzer_duration) P2OUT &= ~BUZZER; //BUZZER OFF AFTER A FEW SEC
         //MOTOR2_IN1 MOTOR2_IN2 MOTOR2_IN3 MOTOR2_IN4
         //0    0   0    1
         P2OUT &=  ~MOTOR2_IN1;

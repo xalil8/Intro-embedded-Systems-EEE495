@@ -18,7 +18,7 @@ void main(void)
     WDTCTL = WDTPW + WDTHOLD; // Stop WDT
 
     P1DIR = MOTOR1_IN1 + MOTOR1_IN2 +MOTOR1_IN3 +MOTOR1_IN4;  //configure MOTOR1 inputs
-    P2DIR = MOTOR2_IN1 + MOTOR2_IN2 +MOTOR2_IN3 +MOTOR2_IN4;  //configure MOTOR2 inputs
+    P2DIR = MOTOR2_IN1 + MOTOR2_IN2 +MOTOR2_IN3 +MOTOR2_IN4 + BUZZER;  //configure MOTOR2 inputs
     //P1DIR |= BIT0 + BIT6; // Set the LEDs on P1.0, P1.6 as outputs
     P1OUT = 0; // Set P1.0
     P2OUT = 0;

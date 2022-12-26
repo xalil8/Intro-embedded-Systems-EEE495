@@ -16,6 +16,7 @@
 *************************************************************/
 #define step_number 512
 #define motor_speed 1300
+#define buzzer_duration 40
 
 /*************************************************************
 *                      MACROS - MOTOR INPUTS
@@ -30,6 +31,7 @@
 #define MOTOR2_IN3 BIT3
 #define MOTOR2_IN4 BIT4
 
+#define BUZZER     BIT5
 /************************************************************
 *                 FUNCTIONS DECLARATIONS
 ************************************************************/
