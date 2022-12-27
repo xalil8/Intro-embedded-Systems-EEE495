@@ -4,8 +4,8 @@
  *      School No: 2017514050
  *      E-mail : halil.ozcan1999@gmail.com
  */
+#include <my_motor_lib.h>
 #include "msp430g2553.h"
-#include "func.h"
 
 
 int x_current = 0;
@@ -16,14 +16,15 @@ unsigned int i = 0;
 void main(void)
 {
     WDTCTL = WDTPW + WDTHOLD; // Stop WDT
+    BCSCTL1 = CALBC1_1MHZ; // Set DCO to 1MHz //main ossilator set 1mhz
+    DCOCTL = CALDCO_1MHZ; // Set DCO to 1MHz
 
     P1DIR = MOTOR1_IN1 + MOTOR1_IN2 +MOTOR1_IN3 +MOTOR1_IN4;  //configure MOTOR1 inputs
     P2DIR = MOTOR2_IN1 + MOTOR2_IN2 +MOTOR2_IN3 +MOTOR2_IN4 + BUZZER;  //configure MOTOR2 inputs
     //P1DIR |= BIT0 + BIT6; // Set the LEDs on P1.0, P1.6 as outputs
     P1OUT = 0; // Set P1.0
     P2OUT = 0;
-    BCSCTL1 = CALBC1_1MHZ; // Set DCO to 1MHz //main ossilator set 1mhz
-    DCOCTL = CALDCO_1MHZ; // Set DCO to 1MHz
+
 
     // Configure hardware UART
     P1SEL = BIT1 + BIT2 ; // P1.1 = RXD, P1.2=TXD
@@ -56,7 +57,27 @@ void main(void)
     P2IES |= BIT0;   // Set interrupt to trigger on rising edge (logic 1)
     P2IFG &= ~BIT0;  // Clear interrupt flag
     //###############################
+    write_serial("$$$$$$$$$$$$$$$-RESET HAPPENED-$$$$$$$$$", 40);
+    write_serial("\n\r", 2);
 
+    x_new = 1;
+
+    while (x_current != x_new) {
+        write_serial("$$$$$$$$$$$$$$$-WORKED-$$$$$$$$$", 32);
+        write_serial("\n\r", 2);
+        if (x_current < x_new){
+            x_current++;
+            write_serial("Motor X Moving + Position", 25);
+            write_serial("\n\r", 2);
+            motor1_clockwise();
+        }
+        else {
+            x_current--;
+            write_serial("Motor X Moving - Position", 25);
+            write_serial("\n\r", 2);
+            motor1_counter_clockwise();
+        }
+    }
     __bis_SR_register(GIE);  // Enable global interrupts
 
     while(1)
@@ -89,6 +110,10 @@ void main(void)
             x_new = str[1] - '0';
             x_new =  -x_new;
             if (x_new < -5) x_new = -5;
+            else if (x_new > 0){
+                write_serial("Wrong input for X coordinate", 28);
+                write_serial("\n\r", 2);
+            }
         }
         else if(str[0]=='+'){
             x_new = str[1] - '0';
@@ -113,9 +138,6 @@ void main(void)
             write_serial("\n\r", 2);
         }
 
-
-//        x_new = x_new - '0'; //conver string '1' to int 1
-//        y_new = y_new - '0';
 
 
         if (x_new != x_current) //if new x coordinate different than current , interrupt occur
