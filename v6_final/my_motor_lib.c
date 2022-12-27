@@ -8,16 +8,6 @@
 
 #include <my_motor_lib.h>
 
-
-
-#pragma vector=RESET_VECTOR
-__interrupt void reset_isr(void)
-{
-    x_new = 2;
-}
-
-
-
 #pragma vector=PORT1_VECTOR
 __interrupt void Port_1(void)
 {
@@ -27,6 +17,7 @@ __interrupt void Port_1(void)
         write_serial("\n\r", 2);
 
         while (x_current != x_new) {
+
             if (x_current < x_new){
                 x_current++;
                 write_serial("Motor X Moving + Position", 25);
@@ -41,6 +32,34 @@ __interrupt void Port_1(void)
             }
         }
         P1IFG &= ~BIT0;  // Clear interrupt flag
+    }
+
+    //interrupt for to get reset positions of motors
+    if (P1IFG & BIT3) {
+        // This is the interrupt handler for pin 1.3
+        reset_sound();
+        x_new = 0;
+        y_new = 0;
+        write_serial("BUTT WORKED", 11);
+        write_serial("\n\r", 2);
+
+        while (x_current != x_new) {
+
+            if (x_current < x_new){
+                x_current++;
+                write_serial("Motor X Moving + Position", 25);
+                write_serial("\n\r", 2);
+                motor1_clockwise();
+            }
+            else {
+                x_current--;
+                write_serial("Motor X Moving - Position", 25);
+                write_serial("\n\r", 2);
+                motor1_counter_clockwise();
+            }
+        }
+        P1IFG &= ~BIT3;  // Clear the interrupt flag for pin 1.3
+        P2IFG |= BIT0;   //set interrupt flag for y motor to reset position
     }
 }
 
@@ -69,6 +88,7 @@ __interrupt void Port_2(void)
             }
         }
         P2IFG &= ~BIT0;  // Clear interrupt flag
+
     }
 }
 
@@ -439,3 +459,64 @@ void motor2_counter_clockwise(void){
     P2OUT &=  ~MOTOR2_IN3;
 }
 
+
+void parse_string(char* str) {
+
+    //for x
+    if(str[0]=='-'){
+        x_new = str[1] - '0';
+        x_new =  -x_new;
+        if (x_new < -5) x_new = -5; //set x=-5 , if input coordinate <-5
+        else if (x_new > 0){
+            write_serial("Wrong input for X coordinate", 28);
+            write_serial("\n\r", 2);
+        }
+    }
+    else if(str[0]=='+'){
+        x_new = str[1] - '0';
+        if (x_new > 5) x_new = 5; //set x=5 , if input coordinate >5
+    }
+    else{
+        write_serial("Wrong input for X coordinate", 28);
+        write_serial("\n\r", 2);
+    }
+
+    //for y
+    if(str[3]=='-'){
+        y_new = str[4] - '0';
+        y_new = -y_new;
+        if (y_new < -5) y_new = -5;  //set y=-5 , if input coordinate <-5
+    }
+    else if(str[3]=='+'){
+        y_new = str[4] - '0';
+        if (y_new > 5) y_new = 5; //set y=5 , if input coordinate >5
+    }
+    else{
+        write_serial("Wrong input for Y coordinate", 28);
+        write_serial("\n\r", 2);
+    }
+}
+
+
+void reset_sound(void){
+    int q;
+    for(q = 0 ;q <=1400; q++){
+        // buzzer effect to warning
+        if (q >= 0 && q < 200) {
+          P2OUT |= BUZZER;
+          __delay_cycles(1000);
+        } else if (q >= 400 && q < 600) {
+          P2OUT |= BUZZER;
+          __delay_cycles(1000);
+        } else if (q >= 800 && q < 1000) {
+          P2OUT |= BUZZER;
+          __delay_cycles(1000);
+        } else if (q >= 1200 && q < 1400) {
+          P2OUT |= BUZZER;
+          __delay_cycles(1000);
+        } else {
+          P2OUT &= ~BUZZER;
+          __delay_cycles(1000);
+        }
+    }
+}

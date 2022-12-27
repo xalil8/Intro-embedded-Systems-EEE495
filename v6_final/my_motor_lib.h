@@ -41,7 +41,8 @@ void motor1_clockwise(void);
 void motor2_counter_clockwise(void);
 void motor2_clockwise(void);
 void write_serial(char *string, unsigned char string_lenght);
-
+void parse_string(char* str);
+void reset_sound(void);
 /************************************************************
 *                 GLOBAL VARIABLES
 ************************************************************/
