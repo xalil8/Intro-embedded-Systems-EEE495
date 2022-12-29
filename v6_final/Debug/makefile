@@ -10,8 +10,8 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
-"./func.obj" \
 "./main.obj" \
+"./my_motor_lib.obj" \
 "../lnk_msp430g2533.cmd" \
 $(GEN_CMDS__FLAG) \
 -llibc.a \
@@ -155,8 +155,8 @@ v6_final.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "func.obj" "main.obj" 
-	-$(RM) "func.d" "main.d" 
+	-$(RM) "main.obj" "my_motor_lib.obj" 
+	-$(RM) "main.d" "my_motor_lib.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

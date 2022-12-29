@@ -1,4 +1,4 @@
-"./func.obj"
 "./main.obj"
+"./my_motor_lib.obj"
 "../lnk_msp430g2533.cmd"
 -llibc.a

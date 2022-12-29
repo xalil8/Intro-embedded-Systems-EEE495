@@ -9,27 +9,27 @@ CMD_SRCS += \
 ../lnk_msp430g2533.cmd 
 
 C_SRCS += \
-../func.c \
-../main.c 
+../main.c \
+../my_motor_lib.c 
 
 C_DEPS += \
-./func.d \
-./main.d 
+./main.d \
+./my_motor_lib.d 
 
 OBJS += \
-./func.obj \
-./main.obj 
+./main.obj \
+./my_motor_lib.obj 
 
 OBJS__QUOTED += \
-"func.obj" \
-"main.obj" 
+"main.obj" \
+"my_motor_lib.obj" 
 
 C_DEPS__QUOTED += \
-"func.d" \
-"main.d" 
+"main.d" \
+"my_motor_lib.d" 
 
 C_SRCS__QUOTED += \
-"../func.c" \
-"../main.c" 
+"../main.c" \
+"../my_motor_lib.c" 
 
 

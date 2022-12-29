@@ -106,15 +106,15 @@ void write_serial(char *string, unsigned char string_lenght){
 void motor1_clockwise(void){
 
     int c;
-    for(c = 0 ;c <=step_number;c++){
+    for(c = 0 ;c <=step_number/divider ;c++){
         // buzzer effect to warning
-        if (c >= 0 && c < 50) {
+        if (c >= 0 && c < 50/divider) {
           P2OUT |= BUZZER;
-        } else if (c >= 130 && c < 180) {
+        } else if (c >= 130/divider && c < 180/divider) {
           P2OUT |= BUZZER;
-        } else if (c >= 260 && c < 310) {
+        } else if (c >= 260/divider && c < 310/divider) {
           P2OUT |= BUZZER;
-        } else if (c >= 390 && c < 440) {
+        } else if (c >= 390/divider && c < 440/divider) {
           P2OUT |= BUZZER;
         } else {
           P2OUT &= ~BUZZER;
@@ -197,15 +197,16 @@ void motor1_clockwise(void){
 void motor1_counter_clockwise(void){
 
     int c;
-    for(c = 0 ;c <=step_number;c++){
+    for(c = 0 ;c <=step_number/divider;c++){
         // buzzer effect to warning
-        if (c >= 0 && c < 50) {
+        // buzzer effect to warning
+        if (c >= 0 && c < 50/divider) {
           P2OUT |= BUZZER;
-        } else if (c >= 130 && c < 180) {
+        } else if (c >= 130/divider && c < 180/divider) {
           P2OUT |= BUZZER;
-        } else if (c >= 260 && c < 310) {
+        } else if (c >= 260/divider && c < 310/divider) {
           P2OUT |= BUZZER;
-        } else if (c >= 390 && c < 440) {
+        } else if (c >= 390/divider && c < 440/divider) {
           P2OUT |= BUZZER;
         } else {
           P2OUT &= ~BUZZER;
@@ -286,15 +287,15 @@ void motor1_counter_clockwise(void){
 void motor2_clockwise(void){
 
     int c;
-    for(c = 0 ;c <=step_number;c++){
+    for(c = 0 ;c <=step_number/divider;c++){
         // buzzer effect to warning
-        if (c >= 0 && c < 50) {
+        if (c >= 0 && c < 50/divider) {
           P2OUT |= BUZZER;
-        } else if (c >= 130 && c < 180) {
+        } else if (c >= 130/divider && c < 180/divider) {
           P2OUT |= BUZZER;
-        } else if (c >= 260 && c < 310) {
+        } else if (c >= 260/divider && c < 310/divider) {
           P2OUT |= BUZZER;
-        } else if (c >= 390 && c < 440) {
+        } else if (c >= 390/divider && c < 440/divider) {
           P2OUT |= BUZZER;
         } else {
           P2OUT &= ~BUZZER;
@@ -374,15 +375,15 @@ void motor2_clockwise(void){
 void motor2_counter_clockwise(void){
 
     int c;
-    for(c = 0 ;c <=step_number;c++){
+    for(c = 0 ;c <=step_number/divider;c++){
         // buzzer effect to warning
-        if (c >= 0 && c < 50) {
+        if (c >= 0 && c < 50/divider) {
           P2OUT |= BUZZER;
-        } else if (c >= 130 && c < 180) {
+        } else if (c >= 130/divider && c < 180/divider) {
           P2OUT |= BUZZER;
-        } else if (c >= 260 && c < 310) {
+        } else if (c >= 260/divider && c < 310/divider) {
           P2OUT |= BUZZER;
-        } else if (c >= 390 && c < 440) {
+        } else if (c >= 390/divider && c < 440/divider) {
           P2OUT |= BUZZER;
         } else {
           P2OUT &= ~BUZZER;

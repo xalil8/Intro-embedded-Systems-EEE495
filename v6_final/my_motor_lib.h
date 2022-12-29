@@ -16,7 +16,7 @@
 *************************************************************/
 #define step_number 512  //512 approximately 1 revolution, 2*512= 2 revolution
 #define motor_speed 1000   //this calculated based on main clock work, lower is faster
-
+#define divider 1
 
 /*************************************************************
 *                      MACROS - MOTOR INPUTS
