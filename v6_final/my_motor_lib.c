@@ -13,8 +13,8 @@ __interrupt void Port_1(void)
 {
     if (P1IFG & BIT0)  // Check if interrupt was triggered by P1.1
     {
-        write_serial("ISR1 WORKED", 11);
-        write_serial("\n\r", 2);
+//        write_serial("ISR1 WORKED", 11);
+//        write_serial("\n\r", 2);
 
         while (x_current != x_new) {
 
@@ -40,7 +40,7 @@ __interrupt void Port_1(void)
         reset_sound();
         x_new = 0;
         y_new = 0;
-        write_serial("BUTT WORKED", 11);
+        write_serial("### MOTORS MOVING TO RESET POSITION ###", 39);
         write_serial("\n\r", 2);
 
         while (x_current != x_new) {
@@ -69,8 +69,8 @@ __interrupt void Port_2(void)
 {
     if (P2IFG & BIT0)  // Check if interrupt was triggered by P1.1
     {
-        write_serial("ISR2 WORKED", 11);
-        write_serial("\n\r", 2);
+//        write_serial("ISR2 WORKED", 11);
+//        write_serial("\n\r", 2);
 
         while (y_current != y_new) {
             if (y_current < y_new){
@@ -459,40 +459,77 @@ void motor2_counter_clockwise(void){
     P2OUT &=  ~MOTOR2_IN3;
 }
 
-
+//this function take char array like '-2,-3' and conver them into int value in range of [-5,5]
 void parse_string(char* str) {
 
-    //for x
-    if(str[0]=='-'){
-        x_new = str[1] - '0';
-        x_new =  -x_new;
-        if (x_new < -5) x_new = -5; //set x=-5 , if input coordinate <-5
-        else if (x_new > 0){
-            write_serial("Wrong input for X coordinate", 28);
-            write_serial("\n\r", 2);
-        }
-    }
-    else if(str[0]=='+'){
-        x_new = str[1] - '0';
-        if (x_new > 5) x_new = 5; //set x=5 , if input coordinate >5
-    }
-    else{
-        write_serial("Wrong input for X coordinate", 28);
+    if(((str[1] < '0' || str[1] > '5') || (str[4] < '0' || str[4] > '5'))){
+        write_serial("ENTER DIGIT", 11);
         write_serial("\n\r", 2);
     }
 
-    //for y
-    if(str[3]=='-'){
-        y_new = str[4] - '0';
-        y_new = -y_new;
-        if (y_new < -5) y_new = -5;  //set y=-5 , if input coordinate <-5
-    }
-    else if(str[3]=='+'){
-        y_new = str[4] - '0';
-        if (y_new > 5) y_new = 5; //set y=5 , if input coordinate >5
+
+    else if(str[2]==','){
+        //////////////for x coordinate////////////////
+        if(str[0]=='-'){ // check if number negative or positive
+            if (str[1] >= '0' && str[1] <= '5'){ // check if number in range 0-5
+                x_new = str[1] - '0'; //convert char to int
+                x_new =  -x_new;      //convert the value to negative in order to its sign
+            }
+            else{
+                write_serial("X Coordinates must be in range of [-5,5]", 40);
+                write_serial("\n\r", 2);
+
+            }
+        }
+
+        else if(str[0]=='+'){
+
+
+            if (str[1] >= '0' && str[1] <= '5'){// check if number in range 0-5
+                x_new = str[1] - '0'; //convert char to int
+            }
+            else{
+                write_serial("X Coordinates must be in range of [-5,5]", 40);
+                write_serial("\n\r", 2);
+            }
+        }
+
+        else{
+            write_serial("X Coordinates Sign must be '-' or '+' ", 38);
+            write_serial("\n\r", 2);
+        }
+
+        //////////////for y coordinate////////////////
+        if(str[3]=='-'){ // check if number negative or positive
+            if (str[4] >= '0' && str[4] <= '5'){ // check if number in range 0-5
+                y_new = str[4] - '0'; //convert char to int
+                y_new =  -y_new;      //convert the value to negative in order to its sign
+            }
+            else{
+                write_serial("Y Coordinates must be in range of [-5,5]", 40);
+                write_serial("\n\r", 2);
+            }
+        }
+
+        else if(str[3]=='+'){
+
+
+            if (str[4] >= '0' && str[4] <= '5'){// check if number in range 0-5
+                y_new = str[4] - '0'; //convert char to int
+            }
+            else{
+                write_serial("Y Coordinates must be in range of [-5,5]", 40);
+                write_serial("\n\r", 2);
+            }
+        }
+
+        else{
+            write_serial("Y Coordinates Sign must be '-' or '+' ", 38);
+            write_serial("\n\r", 2);
+        }
     }
     else{
-        write_serial("Wrong input for Y coordinate", 28);
+        write_serial("Coordinates must be coma',' separate, like '+x,-y' ", 51);
         write_serial("\n\r", 2);
     }
 }
