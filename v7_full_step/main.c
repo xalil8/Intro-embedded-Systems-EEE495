@@ -1,8 +1,9 @@
 /*
  *  Created on: Dec 26, 2022
- *      Author: Halil Ibrahim Özcan
+ *      Author: Halil Ibrahim Ã–zcan
  *      School No: 2017514050
  *      E-mail : halil.ozcan1999@gmail.com
+ *      this project done by xalil
  */
 #include "msp430g2553.h"
 #include <my_motor_lib.h>
